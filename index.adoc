@@ -1,5 +1,5 @@
 = KIT Data Manager Documentation - Repository Service
-v{version}, KIT Data Manager Development Team, {date}
+v1.0, KIT Data Manager Development Team, 2020/12/08
 :doctype: book
 :icons: font
 :source-highlighter: highlightjs
