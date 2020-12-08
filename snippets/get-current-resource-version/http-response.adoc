@@ -1,0 +1,59 @@
+[source,http,options="nowrap"]
+----
+HTTP/1.1 200 OK
+ETag: "-205501225"
+Resource-Version: 4
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1105
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.814Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}
+----

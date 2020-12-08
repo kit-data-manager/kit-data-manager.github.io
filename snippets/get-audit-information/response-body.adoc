@@ -1,0 +1,112 @@
+[source,options="nowrap"]
+----
+[ {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.817",
+    "commitDateInstant" : "2020-12-08T09:24:47.817296400Z",
+    "id" : 4.0
+  },
+  "property" : "publisher",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "SELF",
+  "right" : "KIT Data Manager"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.817",
+    "commitDateInstant" : "2020-12-08T09:24:47.817296400Z",
+    "id" : 4.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:47.612Z",
+  "right" : "2020-12-08T09:24:47.814Z"
+}, {
+  "changeType" : "SetChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.619",
+    "commitDateInstant" : "2020-12-08T09:24:47.619295900Z",
+    "id" : 3.0
+  },
+  "property" : "alternateIdentifiers",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "elementChanges" : [ {
+    "elementChangeType" : "ValueAdded",
+    "index" : null,
+    "value" : {
+      "entity" : "edu.kit.datamanager.entities.Identifier",
+      "cdoId" : 2
+    }
+  } ]
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.619",
+    "commitDateInstant" : "2020-12-08T09:24:47.619295900Z",
+    "id" : 3.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:47.385Z",
+  "right" : "2020-12-08T09:24:47.612Z"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.389",
+    "commitDateInstant" : "2020-12-08T09:24:47.389296600Z",
+    "id" : 2.0
+  },
+  "property" : "publicationYear",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020",
+  "right" : "2017"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.389",
+    "commitDateInstant" : "2020-12-08T09:24:47.389296600Z",
+    "id" : 2.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:46.671Z",
+  "right" : "2020-12-08T09:24:47.385Z"
+} ]
+----

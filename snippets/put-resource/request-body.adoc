@@ -1,0 +1,63 @@
+[source,options="nowrap"]
+----
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER",
+    "lang" : null
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "subjects" : [ ],
+  "contributors" : [ ],
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "relatedIdentifiers" : [ ],
+  "descriptions" : [ ],
+  "geoLocations" : [ ],
+  "language" : null,
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "sizes" : [ ],
+  "formats" : [ ],
+  "version" : null,
+  "rights" : [ ],
+  "fundingReferences" : [ ],
+  "lastUpdate" : "2020-12-08T09:24:47.612Z",
+  "state" : "VOLATILE",
+  "embargoDate" : null,
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}
+----

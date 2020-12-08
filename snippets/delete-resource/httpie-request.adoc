@@ -1,0 +1,5 @@
+[source,bash]
+----
+$ http DELETE 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' \
+    'If-Match:"-205501225"'
+----

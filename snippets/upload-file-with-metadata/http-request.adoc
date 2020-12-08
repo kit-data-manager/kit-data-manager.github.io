@@ -1,0 +1,18 @@
+[source,http,options="nowrap"]
+----
+POST /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile2.txt HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=file; filename=randomFile2.txt
+Content-Type: multipart/form-data
+
+CHfnusrLNh8yEuzEx676A1syEnqZaY8ziZGpj34G1DdQyYjN6GOpaBtrGGemPAnu
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=metadata; filename=metadata.json
+Content-Type: application/json
+
+{"versioningService":"none","depth":0,"size":0,"metadata":{"test":"ok"},"tags":[]}
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--
+----

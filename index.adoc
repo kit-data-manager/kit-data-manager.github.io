@@ -60,18 +60,18 @@ this value as resource identifier. Summarizing, this means:
 
 === Creating a Data Resource
 
-The following example shows the creation of the first resource only providing mandatory fields:
+The following example shows the creation of the first resource only providing mandatory fields:.Title[tree,file=""]
 
-include::{snippets}/create-resource/curl-request.adoc[]
+include::snippets/create-resource/curl-request.adoc[]
 
 You can see, that most of the sent document is empty. Only title, creator and resourceType are provided by the user. HTTP-wise the call looks as follows: 
 
-include::{snippets}/create-resource/http-request.adoc[]
+include::snippets/create-resource/http-request.adoc[]
 
 As Content-Type only 'application/json' is supported and should be provided. The two other headers are typically set by the HTTP client. After validating the 
 provided document, adding missing information where possible and persisting the created resource, the result is sent back to the user and will look that way:
 
-include::{snippets}/create-resource/http-response.adoc[]
+include::snippets/create-resource/http-response.adoc[]
 
 What you see is, that the result looks different from the original document. A few elements, e.g. identifier, alternateIdentifiers, publisher, publicationYear, dates, acls and state
 received a value by the server. Furthermore, you'll find an ETag header with the current ETag of the resource. This value is returned by POST, GET, PUT and PATCH calls and must be provided for 

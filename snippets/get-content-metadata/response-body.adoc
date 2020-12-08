@@ -1,0 +1,30 @@
+[source,options="nowrap"]
+----
+{
+  "id" : 1,
+  "parentResource" : {
+    "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifier" : {
+      "value" : "(:tba)",
+      "identifierType" : "DOI"
+    },
+    "alternateIdentifiers" : [ {
+      "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+      "identifierType" : "INTERNAL"
+    } ]
+  },
+  "relativePath" : "randomFile.txt",
+  "version" : 1,
+  "fileVersion" : "1",
+  "versioningService" : "none",
+  "depth" : 1,
+  "contentUri" : "file:/tmp/'2020'/683ae98f-a663-4dd9-8f20-0dcde71c37a1/randomFile.txt_1607419488367",
+  "uploader" : "SELF",
+  "mediaType" : "text/plain",
+  "hash" : "sha1:b69b09fc5dc3beb25376cab82017b6b1bf561610",
+  "size" : 64,
+  "metadata" : { },
+  "tags" : [ ],
+  "filename" : "randomFile.txt"
+}
+----

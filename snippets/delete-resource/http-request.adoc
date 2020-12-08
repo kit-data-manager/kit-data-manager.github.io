@@ -1,0 +1,7 @@
+[source,http,options="nowrap"]
+----
+DELETE /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+If-Match: "-205501225"
+Host: localhost:8080
+
+----

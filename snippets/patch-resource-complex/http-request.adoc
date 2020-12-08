@@ -1,0 +1,17 @@
+[source,http,options="nowrap"]
+----
+PATCH /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Content-Type: application/json-patch+json
+If-Match: "71195522"
+Content-Length: 152
+Host: localhost:8080
+
+[ {
+  "op" : "add",
+  "path" : "/alternateIdentifiers/1",
+  "value" : {
+    "identifierType" : "OTHER",
+    "value" : "resource-1-231118"
+  }
+} ]
+----
