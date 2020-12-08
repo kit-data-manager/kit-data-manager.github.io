@@ -579,7 +579,7 @@ this value as resource identifier. Summarizing, this means:</p>
 <div class="sect2">
 <h3 id="truecreating-a-data-resource"><a class="anchor" href="#truecreating-a-data-resource"></a><a class="link" href="#truecreating-a-data-resource">2.1. Creating a Data Resource</a></h3>
 <div class="paragraph">
-<p>The following example shows the creation of the first resource only providing mandatory fields:.Title[tree,file=""]</p>
+<p>The following example shows the creation of the first resource only providing mandatory fields:</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -752,11 +752,78 @@ all calls modifying the resource, e.g. PATCH, PUT and DELETE, in order to avoid 
 <p>For obtaining accessible data resources you have multiple options: list all resources, access a single resource using a known identifier or search by example. The following example shows how to obtain a
 single resource.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X GET</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>In the actual HTTP request there is nothing special. You just access the resource&#8217;s path using the base path and the resource identifier.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>As a result, you receive the JSON representation of the resource metadata and again the ETag in the HTTP response header.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-1239688335"
+Resource-Version: 1
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1002
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "SELF",
+  "publicationYear" : "2020",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:46.671Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Often, it is not enough to access either all resources or only one specific resources, but you want to search for resources following criterias you want to specify. This can be either done using an external service,
@@ -768,9 +835,104 @@ document as setting up a search index is quite specific to the use case and will
 <div class="paragraph">
 <p>In order to find resources by example you simple have to POST a resource document all fields filled you want to search for to the endpoint shown in the following curl request:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/search' -i -X POST \
+    -H 'Content-Type: application/json' \
+    -d '{
+  "id" : null,
+  "identifier" : null,
+  "creators" : [ ],
+  "titles" : [ ],
+  "publisher" : null,
+  "publicationYear" : null,
+  "resourceType" : {
+    "id" : null,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "subjects" : [ ],
+  "contributors" : [ ],
+  "dates" : [ ],
+  "relatedIdentifiers" : [ ],
+  "descriptions" : [ ],
+  "geoLocations" : [ ],
+  "language" : null,
+  "alternateIdentifiers" : [ ],
+  "sizes" : [ ],
+  "formats" : [ ],
+  "version" : null,
+  "rights" : [ ],
+  "fundingReferences" : [ ],
+  "lastUpdate" : null,
+  "state" : null,
+  "embargoDate" : null,
+  "acls" : [ ]
+}'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>In our example we search for resources of type DATASET with the type value 'testingSample'. All empty fields in the request can be omitted. You can also see that the endpoint 'dataresources/seach' is based on the
 pattern for all other endpoints, so in that case we want to search for data resources. The result of the request will be either an empty response with no element or a list of matching resources.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Range: 0-19/1
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1109
+
+[ {
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.814Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+} ]</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Also in that case, pagination is supported which you can see in the response header containing the 'Content-Range' key. Internally, assigned values of the example are mapped to queries. Strings are mapped using 'LIKE'
@@ -901,6 +1063,18 @@ Other fields will be supported in future. If you require a certain field by your
 <p>The default way of updating resources' metadata in KIT Data Manager is by using HTTP PATCH. Therefor, JSON Patch documents following the RFC 6902 specification are sent to the server stating
 which operation should be applied to which field with which value. A sample request is shown below.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X PATCH \
+    -H 'Content-Type: application/json-patch+json' \
+    -H 'If-Match: "-1239688335"' \
+    -d '[ {
+  "op" : "replace",
+  "path" : "/publicationYear",
+  "value" : "2017"
+} ]'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>In this simple example we change the publicationYear property of a resource. Therefor, we are using the operation 'replace', the path '/publicationYear' and the new value "2017".
 Thus, you need to know a few things in order to create a patch document:</p>
@@ -923,9 +1097,33 @@ the number of elements before the patch operation in order to add the new elemen
 <p>As soon as you have created your patch document, you can send it to the server using the HTTP verb PATCH and the ETag of the resource. Furthermore, you have to provide the Content-Type 'application/json-patch+json'
 in order to state that you&#8217;re sending a patch document. A valid request will then look as follows:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Content-Type: application/json-patch+json
+If-Match: "-1239688335"
+Content-Length: 81
+Host: localhost:8080
+
+[ {
+  "op" : "replace",
+  "path" : "/publicationYear",
+  "value" : "2017"
+} ]</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>If a patch could be applied, you&#8217;ll receive a response with HTTP status 204 (NO_CONTENT). If this is the case, you can assume that the resource has been changed. If the patch document was invalid, HTTP 400 (BAD_REQUEST)
 will be returned.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+Resource-Version: 2
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
 </div>
 <div class="admonitionblock note">
 <table>
@@ -943,18 +1141,186 @@ all patch operations have been applied.
 <div class="paragraph">
 <p>If you now request the patched resource you will see all modifications included:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X GET</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "71195522"
+Resource-Version: 2
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1002
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "SELF",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.385Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>In the next example, a more complex patch operation is shown adding a new alternate identifier. We are using the patch operation 'add' affecting the path '/alternateIdentifiers/1' with a value containing a
 JSON object representing the new identifier. Using the index 1 is because each resource has by default one alternate identifier of type INTERNAL assigned accessible at index 0. However, it&#8217;s more save to
 check the resource first before trying to add a new element to an array in order to provide the correct index. Otherwise, if you try to add an element to an existing index, HTTP 400 (BAD_REQUEST) will be returned.
 The request for adding a new alternate identifier should look as follows:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X PATCH \
+    -H 'Content-Type: application/json-patch+json' \
+    -H 'If-Match: "71195522"' \
+    -d '[ {
+  "op" : "add",
+  "path" : "/alternateIdentifiers/1",
+  "value" : {
+    "identifierType" : "OTHER",
+    "value" : "resource-1-231118"
+  }
+} ]'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Bear also in mind, that the value of the patch operation contains a value matching the addressed path in the same format as it would be returned by the server. Thus, you don&#8217;t need any escaping of
 array elements or numbers. Only strings have to be quoted. The HTTP request including the proper Content-Type and mandatory ETag is shown in the block below followed by the response we already know.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PATCH /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Content-Type: application/json-patch+json
+If-Match: "71195522"
+Content-Length: 152
+Host: localhost:8080
+
+[ {
+  "op" : "add",
+  "path" : "/alternateIdentifiers/1",
+  "value" : {
+    "identifierType" : "OTHER",
+    "value" : "resource-1-231118"
+  }
+} ]</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+Resource-Version: 3
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>If you now obtain the patched resource you&#8217;ll see that there are two alternate identifiers, the INTERNAL one and the identifier of type OTHER we just added.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X GET</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-470411734"
+Resource-Version: 3
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1093
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "SELF",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.612Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Besides the possiblity of patching resources there is also the option to apply updates to an existing resource via HTTP PUT. This rather traditional approach requires the user to read a resource,
@@ -997,11 +1363,208 @@ produced by hundreds or thousands of users working actively with the system. The
 <div class="paragraph">
 <p>However, let&#8217;s wrap this up with the example of the PUT operation being aware that it should only be used if there are good reasons to do so.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X PUT \
+    -H 'Content-Type: application/json' \
+    -H 'If-Match: "-470411734"' \
+    -d '{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER",
+    "lang" : null
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "subjects" : [ ],
+  "contributors" : [ ],
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "relatedIdentifiers" : [ ],
+  "descriptions" : [ ],
+  "geoLocations" : [ ],
+  "language" : null,
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "sizes" : [ ],
+  "formats" : [ ],
+  "version" : null,
+  "rights" : [ ],
+  "fundingReferences" : [ ],
+  "lastUpdate" : "2020-12-08T09:24:47.612Z",
+  "state" : "VOLATILE",
+  "embargoDate" : null,
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>As described before, the entire document is send with the PUT request including the current ETag of the resource.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">PUT /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Content-Type: application/json
+If-Match: "-470411734"
+Content-Length: 1407
+Host: localhost:8080
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER",
+    "lang" : null
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "subjects" : [ ],
+  "contributors" : [ ],
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "relatedIdentifiers" : [ ],
+  "descriptions" : [ ],
+  "geoLocations" : [ ],
+  "language" : null,
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "sizes" : [ ],
+  "formats" : [ ],
+  "version" : null,
+  "rights" : [ ],
+  "fundingReferences" : [ ],
+  "lastUpdate" : "2020-12-08T09:24:47.612Z",
+  "state" : "VOLATILE",
+  "embargoDate" : null,
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Finally, the updated resource is sent back to the user in the response body together with HTTP status 200 (OK) if the update was successful.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-205501225"
+Resource-Version: 4
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1105
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.814Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
 </div>
 <div class="sect3">
 <h4 id="truerules-for-applying-updates"><a class="anchor" href="#truerules-for-applying-updates"></a><a class="link" href="#truerules-for-applying-updates">2.3.1. Rules for Applying Updates</a></h4>
@@ -1042,12 +1605,36 @@ this main identifier is set at resource creation time, either from a provided DO
 e.g. the DOI added at a later point or the value of another alternate identifier assigned to the resource. In the following example we are using the alternate identifier of type OTHER we just added
 to the resource via patch operation. The request looks like a typical GET request:</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/resource-1-231118' -i -X GET</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Also the HTTP request shows no difference compared to the GET request shown in the beginning:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/resource-1-231118 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>The only difference is how the response looks like. If you are NOT using the main identifier you&#8217;ll not receive a direct response. Instead, HTTP 303 (SEE_OTHER) is returned together with the link
 to the resource including the main identifier in the Location response header.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 303 See Other
+Location: http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1{?version}
+Content-Type: text/plain;charset=UTF-8
+Content-Length: 89
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+
+http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1{?version}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>However, depending on the utilized HTTP client and its configuration, the redirect might be executed immediately such that you won&#8217;t be able to spot any difference compared to the direct request
@@ -1063,6 +1650,13 @@ done using the RESTful API. In order to inform the repository to access data or 
 KIT Data Manager a metadata document is connected called 'ContentInformation'. This document contains internal information, e.g. the relative path, the depth in the hierarchy and the parent resource,
 automatically generated metadata, e.g. checksum, size and mime type information, as well as custom information that can be added by the user, e.g. key-value based metadata or tags for grouping content elements.
 For the time being, let&#8217;s stick with the simple case of uploading a single file you can see in the following example.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt' -i -X POST \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'file=@randomFile.txt;type=multipart/form-data'</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>You should pay attention to three different things: first, check the URL. You can see the base URL for the resource we&#8217;ve created before with the aforementioned 'data' element and a filename 'randomFile.txt'.
@@ -1086,24 +1680,109 @@ independent from the original file name.
 <div class="paragraph">
 <p>In the HTTP request you can see how the data is submitted. You have your part boundary surrounding the actual content of the file in an encoded form.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=file; filename=randomFile.txt
+Content-Type: multipart/form-data
+
+CHfnusrLNh8yEuzEx676A1syEnqZaY8ziZGpj34G1DdQyYjN6GOpaBtrGGemPAnu
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Finally, if the file has been uploaded, a response with HTTP status 201 (CREATED) is returned together with the file access URL in the Location header.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Location: http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt?version=1
+Resource-Version: 1
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Via the file location you can access both: the bitstream of the file as well as metadata collected during file ingest.
 Let&#8217;s first take a look at the metadata. Therefor, you have to do a simple HTTP GET to the data location telling the server that you request for metadata by adding the Accept header with the value
 'application/vnd.datamanager.content-information+json' as you can see it in the curl command below.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt' -i -X GET \
+    -H 'Accept: application/vnd.datamanager.content-information+json'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The HTTP request holds no surprises, it contains the provided target URL as well as the Accept header for requesting ContentInformation instead of data.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt HTTP/1.1
+Accept: application/vnd.datamanager.content-information+json
+Host: localhost:8080</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>With the response you receive on the one hand the current ETag and on the other hand the actual ContentInformation document for the addressed file. All information you can see in the following response
 is added by the server during the file ingest.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-205501225"
+Resource-Version: 1
+Content-Type: application/vnd.datamanager.content-information+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 761
+
+{
+  "id" : 1,
+  "parentResource" : {
+    "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifier" : {
+      "value" : "(:tba)",
+      "identifierType" : "DOI"
+    },
+    "alternateIdentifiers" : [ {
+      "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+      "identifierType" : "INTERNAL"
+    } ]
+  },
+  "relativePath" : "randomFile.txt",
+  "version" : 1,
+  "fileVersion" : "1",
+  "versioningService" : "none",
+  "depth" : 1,
+  "contentUri" : "file:/tmp/'2020'/683ae98f-a663-4dd9-8f20-0dcde71c37a1/randomFile.txt_1607419488367",
+  "uploader" : "SELF",
+  "mediaType" : "text/plain",
+  "hash" : "sha1:b69b09fc5dc3beb25376cab82017b6b1bf561610",
+  "size" : 64,
+  "metadata" : { },
+  "tags" : [ ],
+  "filename" : "randomFile.txt"
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Of course, you can also provide a ContentInformation document during upload, e.g. if you plan to add key-value metadata or tags for a file. In that case you basically do the same as before but you also add
 another file argument with name 'metadata' containing a JSON file with the ContentInformation document.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile2.txt' -i -X POST \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'file=@randomFile2.txt;type=multipart/form-data' \
+    -F 'metadata=@metadata.json;type=application/json'</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>In the HTTP request you now see two content elements: the file 'randomFile2.txt' and the metadata 'metadata.json'. You can choose an arbitrary name for the metadata file, but the content must match the
@@ -1111,23 +1790,83 @@ ContentInformation model. In the example you see what&#8217;s in the metadata fi
 in this file, e.g. depth, size and filename. These are examples for content metadata elements that cannot be set by the user. If there is a value assigned, it will be overwritten during ingest with one
 exception explained later.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile2.txt HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=file; filename=randomFile2.txt
+Content-Type: multipart/form-data
+
+CHfnusrLNh8yEuzEx676A1syEnqZaY8ziZGpj34G1DdQyYjN6GOpaBtrGGemPAnu
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=metadata; filename=metadata.json
+Content-Type: application/json
+
+{"versioningService":"none","depth":0,"size":0,"metadata":{"test":"ok"},"tags":[]}
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The response of the upload including content information is identical to the first upload example. If an HTTP status 201 (CREATED) is returned, everything worked out fine and the file as well as the
 ContentInformation document can be accessed via the Location provided in the header.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Location: http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile2.txt?version=1
+Resource-Version: 1
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Finally, in some cases, it might not be possible or desired to upload a certain file to the repository, e.g. due to size limitations or due to licensing issues. For these cases it is possible, to just register
 a remotely stored file at the local repository. In this scenario, the file argument is omitted during upload and only the ContentInformation metadata document is submitted containing the remote URL in the
 'contentUri' field as you can see it in the following example.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/referencedContent' -i -X POST \
+    -H 'Content-Type: multipart/form-data' \
+    -F 'metadata=@metadata.json;type=application/json'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>There is another exception in this special scenario. As there is no guarantee that the file referenced by 'contentUri' is accessible by the repository and for performance reasons, the file is neither checked
 nor downloaded at ingest time. Therefore, no size or checksum information will be assigned by the system. If you are aware of these information and if you want to make them available, it is allowed to
 provide the size and checksum element of the ContentInformation document at upload time. They are (only in this case) not overwritten and will be available later, no matter if they are correct or not.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">POST /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/referencedContent HTTP/1.1
+Content-Type: multipart/form-data; boundary=6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Host: localhost:8080
+
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm
+Content-Disposition: form-data; name=metadata; filename=metadata.json
+Content-Type: application/json
+
+{"versioningService":"none","depth":0,"contentUri":"https://www.google.com","size":0,"metadata":{},"tags":[]}
+--6o2knFse3p53ty9dmcQvWAIx1zInP11uCfbm--</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>Finally, the response of the 'virtual upload' looks as before. However, please keep in mind that there are NO CHECKS of what&#8217;s behind the contentUri. This happens only at download time, which will be the next
 example.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 201 Created
+Location: http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/referencedContent?version=1
+Resource-Version: 1
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1136,12 +1875,113 @@ example.</p>
 <p>If you just uploaded the data you still have the data access URL in the Location header of the upload response. However, if you are not the uploader you have to check first, which files are associated with a
 resource in order to obtain a data access URL before download. This can be done by submitting an HTTP GET request to an arbitraty 'virtual folder' as shown in the next example.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/' -i -X GET \
+    -H 'Accept: application/vnd.datamanager.content-information+json'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>This request will return all content information associated with the addressed resource as we perform a listing of the root data folder. By providing the Accept header with a value 'application/vnd.datamanager.content-information+json'
 we ask for ContentInformation metadata as we&#8217;ve learned before. Currently, it is NOT possible to access a 'virtual folder' without providing this header.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/ HTTP/1.1
+Accept: application/vnd.datamanager.content-information+json
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>In the response we get all ContentInformation entries starting with the accessed path. As we provided the root path of the resource&#8217;s data, we receive all three content elements we&#8217;ve uploaded until now.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: application/vnd.datamanager.content-information+json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 2121
+
+[ {
+  "id" : 1,
+  "parentResource" : {
+    "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifier" : {
+      "value" : "(:tba)",
+      "identifierType" : "DOI"
+    },
+    "alternateIdentifiers" : [ {
+      "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+      "identifierType" : "INTERNAL"
+    } ]
+  },
+  "relativePath" : "randomFile.txt",
+  "version" : 1,
+  "fileVersion" : "1",
+  "versioningService" : "none",
+  "depth" : 1,
+  "contentUri" : "file:/tmp/'2020'/683ae98f-a663-4dd9-8f20-0dcde71c37a1/randomFile.txt_1607419488367",
+  "uploader" : "SELF",
+  "mediaType" : "text/plain",
+  "hash" : "sha1:b69b09fc5dc3beb25376cab82017b6b1bf561610",
+  "size" : 64,
+  "metadata" : { },
+  "tags" : [ ],
+  "filename" : "randomFile.txt"
+}, {
+  "id" : 2,
+  "parentResource" : {
+    "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifier" : {
+      "value" : "(:tba)",
+      "identifierType" : "DOI"
+    },
+    "alternateIdentifiers" : [ {
+      "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+      "identifierType" : "INTERNAL"
+    } ]
+  },
+  "relativePath" : "randomFile2.txt",
+  "version" : 1,
+  "fileVersion" : "1",
+  "versioningService" : "none",
+  "depth" : 1,
+  "contentUri" : "file:/tmp/'2020'/683ae98f-a663-4dd9-8f20-0dcde71c37a1/randomFile2.txt_1607419488602",
+  "mediaType" : "text/plain",
+  "hash" : "sha1:b69b09fc5dc3beb25376cab82017b6b1bf561610",
+  "size" : 64,
+  "metadata" : {
+    "test" : "ok"
+  },
+  "tags" : [ ],
+  "filename" : "randomFile2.txt"
+}, {
+  "id" : 3,
+  "parentResource" : {
+    "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifier" : {
+      "value" : "(:tba)",
+      "identifierType" : "DOI"
+    },
+    "alternateIdentifiers" : [ {
+      "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+      "identifierType" : "INTERNAL"
+    } ]
+  },
+  "relativePath" : "referencedContent",
+  "version" : 1,
+  "fileVersion" : "1",
+  "versioningService" : "none",
+  "depth" : 1,
+  "contentUri" : "https://www.google.com",
+  "size" : 0,
+  "metadata" : { },
+  "tags" : [ ],
+  "filename" : "referencedContent"
+} ]</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>Listing ContentInformation also support pagination. Furthermore, the results are sorted by their depth within the entire hierarchy of the resource&#8217;s content. This means, when listing the root folder of a complex content hierarchy,
@@ -1157,11 +1997,34 @@ you&#8217;ll first receive all elements directly located at the root folder foll
 <p>After explaining how metadata and data are put into the system, let&#8217;s give a brief overview on downloading content. Actually, it&#8217;s just putting the file URL received during upload to the browser address bar or
 to issue a GET request without Accept header as you can see in the curl command below.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt' -i -X GET</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>There is not much to say about the HTTP request as it only contains the location of the data&#8230;&#8203;</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1/data/randomFile.txt HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>&#8230;&#8203;and the response contains the content of the file. That&#8217;s all in case the file is located at the repository.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Content-Type: text/plain
+Content-Length: 64
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+
+CHfnusrLNh8yEuzEx676A1syEnqZaY8ziZGpj34G1DdQyYjN6GOpaBtrGGemPAnu</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>If the content is not located at the repository but referenced from remote, there are plenty of possible responses depending on the availability of the referenced content. While accessing references content,
@@ -1293,11 +2156,32 @@ indicates that all content within the addressed folder is downloaded in a single
 is implemented in a way of revoking resources to make them invisible to users, but as they might be references internally or externally, they are never removed from the system unless using additional tools. The following request
 shows how a DELETE operation is performed on an existing resource.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X DELETE \
+    -H 'If-Match: "-205501225"'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>You can see that you need the resource URL as well as the current ETag.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+If-Match: "-205501225"
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The server responds with status HTTP NO_CONTENT (204) to all returning delete requests, even if the resource has been deleted already.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>As soon as the resource was REVOKED, no user will be able to see or access the resource. A request to the resource URL will result in an HTTP status NOT_FOUND (404).
@@ -1308,21 +2192,113 @@ and modify the resource, e.g. in order to change back the state to VOLATILE or F
 <p>If no authentication is enabled, which is assumed by this documentation, the deletion of resources only changes the state to REVOKED. The system account used for authentication-less access is automatically the owner
 of all resources, which grants this account the access even to revoked resources. This is shown in the following example.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X GET</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>We are trying a normal HTTP GET to the resource we just deleted. According to the description above, we should receive a positive response showing us a resource with state REVOKED.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The response looks as expected. The resource we&#8217;ve deleted with the changed state.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-179652677"
+Resource-Version: 5
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1104
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:49.129Z",
+  "state" : "REVOKED",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>That&#8217;s the reason why another resource state has been introduced in case a resource should be hidden entirely from all users. This state is called GONE and is assigned if a revoked resource is deleted by
 an ADMINISTRATOR. Of course, the GONE state can also be assigned via PATCH operation, but deleting a resource twice is the typical approach to do so. Let&#8217;s try applying a delete operation a second time.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">DELETE /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+If-Match: "-179652677"
+Host: localhost:8080</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The response looks as expected delivering status status HTTP NO_CONTENT (204).</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 204 No Content
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>However, if we now try to access the resource again via HTTP GET&#8230;&#8203;</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">GET /api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1 HTTP/1.1
+Host: localhost:8080</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>&#8230;&#8203;we&#8217;ll receive nothing but the status HTTP NOT_FOUND (404). From now on, the resource is no longer accessible by anybody via RESTful endpoints. The only possibility to re-allow resource access is to modify its state
@@ -1639,8 +2615,135 @@ larger than 0 tells you, that versioning is enabled. If not, the version number 
 <p>Now, how can you benefit from this. At first, you might be interested to get all changes applied to a resource. The following request delivers this information. You simply refer to the resource for which you want to obtain audit information
 and provide in the 'Accept' header the value 'application/vnd.datamanager.audit+json'.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1' -i -X GET \
+    -H 'Accept: application/vnd.datamanager.audit+json'</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>As a result you receive a list of changes in a format, which is proprietary to JaVers but which also contains all information in a clear JSON format. Changes are returned ordered by version in decreasing order.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+Resource-Version: 4
+Content-Type: application/vnd.datamanager.audit+json;charset=UTF-8
+Content-Length: 3341
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+
+[ {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.817",
+    "commitDateInstant" : "2020-12-08T09:24:47.817296400Z",
+    "id" : 4.0
+  },
+  "property" : "publisher",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "SELF",
+  "right" : "KIT Data Manager"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.817",
+    "commitDateInstant" : "2020-12-08T09:24:47.817296400Z",
+    "id" : 4.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:47.612Z",
+  "right" : "2020-12-08T09:24:47.814Z"
+}, {
+  "changeType" : "SetChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.619",
+    "commitDateInstant" : "2020-12-08T09:24:47.619295900Z",
+    "id" : 3.0
+  },
+  "property" : "alternateIdentifiers",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "elementChanges" : [ {
+    "elementChangeType" : "ValueAdded",
+    "index" : null,
+    "value" : {
+      "entity" : "edu.kit.datamanager.entities.Identifier",
+      "cdoId" : 2
+    }
+  } ]
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.619",
+    "commitDateInstant" : "2020-12-08T09:24:47.619295900Z",
+    "id" : 3.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:47.385Z",
+  "right" : "2020-12-08T09:24:47.612Z"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.389",
+    "commitDateInstant" : "2020-12-08T09:24:47.389296600Z",
+    "id" : 2.0
+  },
+  "property" : "publicationYear",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020",
+  "right" : "2017"
+}, {
+  "changeType" : "ValueChange",
+  "globalId" : {
+    "entity" : "edu.kit.datamanager.repo.domain.DataResource",
+    "cdoId" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1"
+  },
+  "commitMetadata" : {
+    "author" : "SELF",
+    "properties" : [ ],
+    "commitDate" : "2020-12-08T10:24:47.389",
+    "commitDateInstant" : "2020-12-08T09:24:47.389296600Z",
+    "id" : 2.0
+  },
+  "property" : "lastUpdate",
+  "propertyChangeType" : "PROPERTY_VALUE_CHANGED",
+  "left" : "2020-12-08T09:24:46.671Z",
+  "right" : "2020-12-08T09:24:47.385Z"
+} ]</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>In the example you can see three changes (starting with the last entry):</p>
@@ -1664,12 +2767,133 @@ and provide in the 'Accept' header the value 'application/vnd.datamanager.audit+
 <div class="paragraph">
 <p>Now, what about obtaining a specific version of a resource. This is done as shown in the next request.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code data-lang="bash" class="language-bash hljs">$ curl 'http://localhost:8080/api/v1/dataresources/683ae98f-a663-4dd9-8f20-0dcde71c37a1?version=2' -i -X GET</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>The only thing you have to do is to add a query parameter with name 'version' and the value of the requested version to your GET request. As a result, you&#8217;ll receive the resource state at the specified version, which is
 also stated by the 'Resource-Version' header.</p>
 </div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "71195522"
+Resource-Version: 2
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1002
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "SELF",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.385Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
+</div>
 <div class="paragraph">
 <p>If you omit the version argument, you always get the most recent version of the resource, in our example it&#8217;s version 4 as shown below.</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight nowrap"><code data-lang="http" class="language-http hljs">HTTP/1.1 200 OK
+ETag: "-205501225"
+Resource-Version: 4
+Content-Type: application/json
+X-Content-Type-Options: nosniff
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: DENY
+Content-Length: 1105
+
+{
+  "id" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+  "identifier" : {
+    "id" : 1,
+    "value" : "(:tba)",
+    "identifierType" : "DOI"
+  },
+  "creators" : [ {
+    "id" : 1,
+    "familyName" : "Doe",
+    "givenName" : "John",
+    "affiliations" : [ "Karlsruhe Institute of Technology" ]
+  } ],
+  "titles" : [ {
+    "id" : 1,
+    "value" : "Most basic resource for testing",
+    "titleType" : "OTHER"
+  } ],
+  "publisher" : "KIT Data Manager",
+  "publicationYear" : "2017",
+  "resourceType" : {
+    "id" : 1,
+    "value" : "testingSample",
+    "typeGeneral" : "DATASET"
+  },
+  "dates" : [ {
+    "id" : 1,
+    "value" : "2020-12-08T09:24:46Z",
+    "type" : "CREATED"
+  } ],
+  "alternateIdentifiers" : [ {
+    "id" : 2,
+    "value" : "resource-1-231118",
+    "identifierType" : "OTHER"
+  }, {
+    "id" : 1,
+    "value" : "683ae98f-a663-4dd9-8f20-0dcde71c37a1",
+    "identifierType" : "INTERNAL"
+  } ],
+  "lastUpdate" : "2020-12-08T09:24:47.814Z",
+  "state" : "VOLATILE",
+  "acls" : [ {
+    "id" : 1,
+    "sid" : "SELF",
+    "permission" : "ADMINISTRATE"
+  } ]
+}</code></pre>
+</div>
 </div>
 <div class="paragraph">
 <p>As mentioned at the beginning, versioning is supported for metadata resources, e.g. data resources and content information. There is currently no support for versioning of the actual content.</p>
@@ -1690,7 +2914,7 @@ of the entire document which will result in a new version equal to the previous 
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2020-12-08 10:34:25 +0100
+Last updated 2020-12-08 10:44:30 +0100
 </div>
 </div>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/github.min.css">
